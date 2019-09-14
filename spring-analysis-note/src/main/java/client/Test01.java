@@ -1,3 +1,6 @@
+package client;
+
+import bean.MyBean01;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -6,10 +9,10 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  *
  * @author wangxi
  */
-public class MyApplication {
+public class Test01 {
 	public static void main(String[] args) {
 		ApplicationContext ac = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
-		Hello hello = (Hello)ac.getBean("hello");
+		MyBean01 hello = (MyBean01)ac.getBean("mybean01");
 		hello.sayHello();
 	}
 }

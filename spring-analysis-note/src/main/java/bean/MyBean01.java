@@ -1,11 +1,13 @@
+package bean;
+
 /**
  * <Description>
  *
  * @author wangxi
  */
-public class Hello {
+public class MyBean01 {
 	public void sayHello() {
-		System.out.println("Hello, zhangfengxian");
+		System.out.println("hello wangxi");
 	}
 }
 
