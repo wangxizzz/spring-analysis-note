@@ -92,6 +92,7 @@ dependencies {
 		exclude group: "stax", module: "stax-api"
 	}
 	testCompile(project(":spring-core-coroutines"))
+	compile fileTree(dir: 'libs', include: '*.jar')
 }
 
 jar {

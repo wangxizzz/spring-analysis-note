@@ -194,7 +194,8 @@ public class ServletRequestMethodArgumentResolver implements HandlerMethodArgume
 
 		@Nullable
 		public static Object resolvePushBuilder(HttpServletRequest request, Class<?> paramType) {
-			PushBuilder pushBuilder = request.newPushBuilder();
+//			PushBuilder pushBuilder = request.newPushBuilder();
+			PushBuilder pushBuilder = null;
 			if (pushBuilder != null && !paramType.isInstance(pushBuilder)) {
 				throw new IllegalStateException(
 						"Current push builder is not of type [" + paramType.getName() + "]: " + pushBuilder);
