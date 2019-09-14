@@ -316,7 +316,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 		if (logger.isTraceEnabled()) {
 			logger.trace("Loading XML bean definitions from " + encodedResource);
 		}
-
+		// 通过属性来记录已经加载的资源
 		Set<EncodedResource> currentResources = this.resourcesCurrentlyBeingLoaded.get();
 		if (currentResources == null) {
 			currentResources = new HashSet<>(4);
@@ -334,6 +334,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 				if (encodedResource.getEncoding() != null) {
 					inputSource.setEncoding(encodedResource.getEncoding());
 				}
+				// 核心处理方法
 				return doLoadBeanDefinitions(inputSource, encodedResource.getResource());
 			}
 			finally {
@@ -512,7 +513,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 	 * @see BeanDefinitionDocumentReader#registerBeanDefinitions
 	 */
 	public int registerBeanDefinitions(Document doc, Resource resource) throws BeanDefinitionStoreException {
-		// 使用 DefaultBeanDefinitionDocumentReader 实例化 BeanDefinitionDocumentReader
+		// 使用 DefaultBeanDefinitionDocumentReader 实例化 BeanDefinitionDocumentReader(为啥需要使用反射，直接new不好吗？)
 		BeanDefinitionDocumentReader documentReader = createBeanDefinitionDocumentReader();
 		// 记录统计前 beanDefinition 的加载个数
 		int countBefore = getRegistry().getBeanDefinitionCount();
