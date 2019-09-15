@@ -2,7 +2,11 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-
-	<bean id="mybean01" class="bean.MyBean01"></bean>
-
+	<!--增加别名方式1-->
+	<bean id="mybean01" class="bean.MyBean01" name="bean02,bean03">
+	</bean>
+	<!--alias name="mybean01" 此时的name相当于bean的id-->
+	<alias name="mybean01" alias="bean04"/>
+	<!--import标签 分模块-->
+	<!--<import resource="applicationContext.xml"/>-->
 </beans>
