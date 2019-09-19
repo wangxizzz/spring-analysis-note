@@ -5,9 +5,9 @@ package bean;
  *
  * @author wangxi
  */
-public class MyBean01 {
+public class Bean02 {
 	public void sayHello() {
-		System.out.println("Bean01");
+		System.out.println("Bean02");
 	}
 }
 
