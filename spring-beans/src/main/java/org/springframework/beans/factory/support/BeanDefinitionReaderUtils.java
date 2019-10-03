@@ -167,6 +167,7 @@ public abstract class BeanDefinitionReaderUtils {
 		// Register bean definition under primary name.
 		// 注释 1.17 在 DefaultListableBeanFactory 的 beanDefinitionMap 中添加 bean 定义
 		String beanName = definitionHolder.getBeanName();
+		// 注册解析后的xml的BeanDefinition与beanName的映射
 		registry.registerBeanDefinition(beanName, definitionHolder.getBeanDefinition());
 
 		// Register aliases for bean name, if any.

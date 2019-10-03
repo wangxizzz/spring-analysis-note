@@ -331,7 +331,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 				getReaderContext().error("Failed to register bean definition with name '" +
 						bdHolder.getBeanName() + "'", ele, ex);
 			}
-			// Send registration event. 通知相关的监听器，表示这个 bean 已经加载完成
+			// Send registration event. 通知相关的监听器，表示这个 bean 已经注册完成
 			getReaderContext().fireComponentRegistered(new BeanComponentDefinition(bdHolder));
 		}
 	}

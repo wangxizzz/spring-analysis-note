@@ -14,8 +14,8 @@ import org.springframework.core.io.ClassPathResource;
 public class Test02 {
 	public static void main(String[] args) {
 		BeanFactory beanFactory = new XmlBeanFactory(new ClassPathResource("applicationContext.xml"));
-		MyBean01 bean01 = (MyBean01) beanFactory.getBean("B");
-		bean01.sayHello();
+//		MyBean01 bean01 = (MyBean01) beanFactory.getBean("B");
+//		bean01.sayHello();
 		Car car = (Car)beanFactory.getBean("car");
 		System.out.println(car.toString());
 	}

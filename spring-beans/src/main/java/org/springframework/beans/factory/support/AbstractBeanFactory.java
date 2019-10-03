@@ -332,6 +332,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					// 接口实现的方法是 createBean(beanName, mbd, args)
 					sharedInstance = getSingleton(beanName, () -> {
 						try {
+							// 真正加载bean的方法
 							return createBean(beanName, mbd, args);
 						}
 						catch (BeansException ex) {
@@ -1679,6 +1680,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		if (!(beanInstance instanceof FactoryBean) || BeanFactoryUtils.isFactoryDereference(name)) {
 			return beanInstance;
 		}
+		// 能走到这里来，说明用户传入的参数是FactoryBean，但是参数又没有带 & 符号，所以，spring这块做了兼容
 		// 加载工厂 bean
 		Object object = null;
 		if (mbd == null) {
