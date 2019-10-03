@@ -3,8 +3,10 @@
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 	<!--增加别名方式1-->
-	<bean id="A" class="bean.MyBean01" name="B"></bean>
+	<bean id="A" class="bean.MyBean01" name="B"/>
 
 	<!--<bean id="D" class="bean.Bean02" name="A"></bean>-->
-
+	<bean id="car" class="factory.CarFactoryBean">
+		<property name="carInfo" value="超级跑车,400,3000000"/>
+	</bean>
 </beans>

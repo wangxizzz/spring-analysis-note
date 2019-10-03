@@ -1,5 +1,6 @@
 package client;
 
+import bean.Car;
 import bean.MyBean01;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
@@ -15,6 +16,8 @@ public class Test02 {
 		BeanFactory beanFactory = new XmlBeanFactory(new ClassPathResource("applicationContext.xml"));
 		MyBean01 bean01 = (MyBean01) beanFactory.getBean("B");
 		bean01.sayHello();
+		Car car = (Car)beanFactory.getBean("car");
+		System.out.println(car.toString());
 	}
 }
 
