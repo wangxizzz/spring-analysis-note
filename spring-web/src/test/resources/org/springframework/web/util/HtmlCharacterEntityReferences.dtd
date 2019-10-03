@@ -304,7 +304,7 @@
 <!ENTITY piv      CDATA "&#982;" -- greek pi symbol, U+03D6 ISOgrk3 -->
 
 <!-- General Punctuation -->
-<!ENTITY bull     CDATA "&#8226;" -- bullet = black small circle,
+<!ENTITY bull     CDATA "&#8226;" -- bullet = black small base.circle,
                                      U+2022 ISOpub  -->
 <!-- bullet is NOT the same as bullet operator, U+2219 -->
 <!ENTITY hellip   CDATA "&#8230;" -- horizontal ellipsis = three dot leader,
