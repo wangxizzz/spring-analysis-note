@@ -8,9 +8,9 @@ public class CircleA {
 	private CircleB circleB;
 
 	// 测试构造方法循环依赖
-//	public CircleA(CircleB circleB) {
-//		this.circleB = circleB;
-//	}
+	public CircleA(CircleB circleB) {
+		this.circleB = circleB;
+	}
 	/**
 	 * 设定一个函数，调用 B 类的方法
 	 */
