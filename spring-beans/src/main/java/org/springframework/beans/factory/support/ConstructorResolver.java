@@ -124,27 +124,33 @@ class ConstructorResolver {
 		Constructor<?> constructorToUse = null;
 		ArgumentsHolder argsHolderToUse = null;
 		Object[] argsToUse = null;
-
+		// 如果 getBean 方法调用的时候指定方法参数那么直接使用
 		if (explicitArgs != null) {
 			argsToUse = explicitArgs;
 		}
 		else {
+			//如果在 getBean 方法时候没有指定则尝试从配置文件中解析，把配置文件的属性提前缓存
 			Object[] argsToResolve = null;
 			synchronized (mbd.constructorArgumentLock) {
 				constructorToUse = (Constructor<?>) mbd.resolvedConstructorOrFactoryMethod;
 				if (constructorToUse != null && mbd.constructorArgumentsResolved) {
+					//尝试从缓存中获取
 					// Found a cached constructor...
 					argsToUse = mbd.resolvedConstructorArguments;
 					if (argsToUse == null) {
+						// 从配置文件获取配置的构造函数参数
 						argsToResolve = mbd.preparedConstructorArguments;
 					}
 				}
 			}
+			// 如果缓存中存在
 			if (argsToResolve != null) {
+				//解析参数类型， 如给定方法的构造函数 A(int, int)则通过此方法后就会把配置中的 (”1”，”1”)转换为 (1,1)
+				// 缓存中的值可能是原始值也可能是最终值
 				argsToUse = resolvePreparedArguments(beanName, mbd, bw, constructorToUse, argsToResolve, true);
 			}
 		}
-
+		// 如果没有缓存
 		if (constructorToUse == null || argsToUse == null) {
 			// Take specified constructors, if any.
 			Constructor<?>[] candidates = chosenCtors;
@@ -184,6 +190,7 @@ class ConstructorResolver {
 				minNrOfArgs = explicitArgs.length;
 			}
 			else {
+				// 从配置文件读取参数
 				ConstructorArgumentValues cargs = mbd.getConstructorArgumentValues();
 				resolvedValues = new ConstructorArgumentValues();
 				minNrOfArgs = resolveConstructorArguments(beanName, mbd, bw, cargs, resolvedValues);

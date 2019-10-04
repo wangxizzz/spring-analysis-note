@@ -594,13 +594,14 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 						"' to allow for resolving potential circular references");
 			}
 			// 注释 5.2 将缓存中的 bean 信息更新，解决循环依赖 第二个参数是回调接口，实现的功能是将切面动态织入 bean
+			// 在bean还未创建完成，先把ObjectFactory加入
 			addSingletonFactory(beanName, () -> getEarlyBeanReference(beanName, mbd, bean));
 		}
 
 		// Initialize the bean instance.
 		Object exposedObject = bean;
 		try {
-			// 对 bean 进行填充，将各个属性值注入
+			// 对 bean 进行填充，将当前bean依赖的bean注入
 			// 如果存在对其它 bean 的依赖，将会递归初始化依赖的 bean
 			populateBean(beanName, mbd, instanceWrapper);
 			// 调用初始化方法，例如 init-method
@@ -1395,6 +1396,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 						mbd.getResourceDescription(), beanName, "Cannot apply property values to null instance");
 			}
 			else {
+				// 没有可填充的属性
 				// Skip property population phase for null instance.
 				return;
 			}
@@ -1494,7 +1496,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 */
 	protected void autowireByName(
 			String beanName, AbstractBeanDefinition mbd, BeanWrapper bw, MutablePropertyValues pvs) {
-
+		//寻找 bw 中需要依赖注人的属性
 		String[] propertyNames = unsatisfiedNonSimpleProperties(mbd, bw);
 		for (String propertyName : propertyNames) {
 			if (containsBean(propertyName)) {
@@ -1538,14 +1540,18 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		String[] propertyNames = unsatisfiedNonSimpleProperties(mbd, bw);
 		for (String propertyName : propertyNames) {
 			try {
+				// 根据依赖的bean获取PropertyDescriptor
 				PropertyDescriptor pd = bw.getPropertyDescriptor(propertyName);
 				// Don't try autowiring by type for type Object: never makes sense,
 				// even if it technically is a unsatisfied, non-simple property.
 				if (Object.class != pd.getPropertyType()) {
+					// 探测指定通常为JavaBean中属性的set方法
 					MethodParameter methodParam = BeanUtils.getWriteMethodParameter(pd);
 					// Do not allow eager init for type matching in case of a prioritized post-processor.
 					boolean eager = !PriorityOrdered.class.isInstance(bw.getWrappedInstance());
 					DependencyDescriptor desc = new AutowireByTypeDependencyDescriptor(methodParam, eager);
+					//解析指定 beanName 的属性所匹配的值，并把解析到的属性名称存储在 autowiredBeanNames 中， 当属性存在多个封装 bean时如:
+					// @Autowired private List<A> aList， 将会找到所有匹配 A类型的 bean 并将其注入
 					Object autowiredArgument = resolveDependency(desc, beanName, autowiredBeanNames, converter);
 					if (autowiredArgument != null) {
 						pvs.add(propertyName, autowiredArgument);

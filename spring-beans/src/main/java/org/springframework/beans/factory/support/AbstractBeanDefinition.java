@@ -897,6 +897,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 * @since 5.0.2
 	 */
 	public boolean hasMethodOverrides() {
+		// 如果<bean>配置了lookup或者replace，则此属性就有
 		return (this.methodOverrides != null && !this.methodOverrides.isEmpty());
 	}
 
