@@ -1835,7 +1835,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		try {
-			// 激活用户自定义的 init-method 方法
+			// 激活用户自定义的InitializingBean.afterPropertiesSet 和 init-method 方法(注意有先后顺序)
 			invokeInitMethods(beanName, wrappedBean, mbd);
 		}
 		catch (Throwable ex) {
@@ -1966,6 +1966,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		else {
 			try {
 				ReflectionUtils.makeAccessible(initMethod);
+				// 通过反射执行init-method的方法
 				initMethod.invoke(bean);
 			}
 			catch (InvocationTargetException ex) {
