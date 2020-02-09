@@ -41,6 +41,7 @@ import org.springframework.util.StringUtils;
  * @see ClassLoader#getResourceAsStream(String)
  * @see Class#getResourceAsStream(String)
  */
+// 把资源抽象成ClassPathResource,其本质就是类本身保存 filePath, classLoader, clazz
 public class ClassPathResource extends AbstractFileResolvingResource {
 
 	private final String path;

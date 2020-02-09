@@ -207,7 +207,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 		}
 		else if (delegate.nodeNameEquals(ele, NESTED_BEANS_ELEMENT)) {
 			// recurse
-			// 解析 beans 标签，其实就是递归，重新对这个 element 下的标签进行注册解析
+			// 解析 beans 标签，其实就是循环，重新对这个 element 下的标签进行注册解析
 			doRegisterBeanDefinitions(ele);
 		}
 	}

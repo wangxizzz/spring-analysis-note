@@ -316,8 +316,9 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 		if (logger.isTraceEnabled()) {
 			logger.trace("Loading XML bean definitions from " + encodedResource);
 		}
-		// 通过属性来记录已经加载的资源
+		// 通过属性来记录当前线程已经加载的资源
 		Set<EncodedResource> currentResources = this.resourcesCurrentlyBeingLoaded.get();
+		// 注意：使用ThreadLocal必须需要有判空处理，防止NPE.
 		if (currentResources == null) {
 			currentResources = new HashSet<>(4);
 			this.resourcesCurrentlyBeingLoaded.set(currentResources);
@@ -346,7 +347,9 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 					"IOException parsing XML document from " + encodedResource.getResource(), ex);
 		}
 		finally {
+			// xml资源加载完毕，最终会移除缓存的资源
 			currentResources.remove(encodedResource);
+			// 先判空，然后手动清除ThreadLocal
 			if (currentResources.isEmpty()) {
 				this.resourcesCurrentlyBeingLoaded.remove();
 			}
@@ -391,7 +394,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 			throws BeanDefinitionStoreException {
 
 		try {
-			// 注释 1.8 将资源文件解析成 document
+			// 注释 1.8 将xml格式的资源文件解析成 document
 			Document doc = doLoadDocument(inputSource, resource);
 			// 注释 1.10 从 doc 和资源中解析元素，注册到 bean factory
 			int count = registerBeanDefinitions(doc, resource);
@@ -515,7 +518,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 	public int registerBeanDefinitions(Document doc, Resource resource) throws BeanDefinitionStoreException {
 		// 使用 DefaultBeanDefinitionDocumentReader 实例化 BeanDefinitionDocumentReader(为啥需要使用反射，直接new不好吗？)
 		BeanDefinitionDocumentReader documentReader = createBeanDefinitionDocumentReader();
-		// 记录统计前 beanDefinition 的加载个数
+		// 记录 已经加载过的 beanDefinition个数
 		int countBefore = getRegistry().getBeanDefinitionCount();
 		// 加载及注册 bean，这里使用注册工厂的是 DefaultListableBeanFactory
 		documentReader.registerBeanDefinitions(doc, createReaderContext(resource));
