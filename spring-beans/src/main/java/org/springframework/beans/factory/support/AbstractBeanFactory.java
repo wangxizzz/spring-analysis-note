@@ -239,7 +239,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	@SuppressWarnings("unchecked")
 	protected <T> T doGetBean(final String name, @Nullable final Class<T> requiredType,
 			@Nullable final Object[] args, boolean typeCheckOnly) throws BeansException {
-		// 注释 4.2 获取 bean 名称，如果需要，去掉引用前缀（例如修饰符），还有将别名转换成最终 beanName
+		// 获取 bean 名称，如果需要，去掉引用前缀（例如修饰符），还有将别名转换成最终 beanName
 		final String beanName = transformedBeanName(name);
 		Object bean;
 		// 从缓存中或者实例工厂中获取Bean对象
@@ -264,13 +264,13 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				throw new BeanCurrentlyInCreationException(beanName);
 			}
 
-			// 如果容器中没有找到，则从父类容器中加载
+			// 如果容器中没有找到，则从父类容器中加载bean实例
 			BeanFactory parentBeanFactory = getParentBeanFactory();
 			if (parentBeanFactory != null && !containsBeanDefinition(beanName)) {
 				// Not found -> check parent.
 				String nameToLookup = originalBeanName(name);
 				if (parentBeanFactory instanceof AbstractBeanFactory) {
-					// 递归到父类查找
+					// 递归到父类加载bean实例
 					return ((AbstractBeanFactory) parentBeanFactory).doGetBean(
 							nameToLookup, requiredType, args, typeCheckOnly);
 				}
@@ -1654,23 +1654,20 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	protected Object getObjectForBeanInstance(
 			Object beanInstance, String name, String beanName, @Nullable RootBeanDefinition mbd) {
 
-		// Don't let calling code try to dereference the factory if the bean isn't a factory.
-		// 注释 4.6 如果 beanName 前缀是 & 符号
+		// 如果 name 前缀是 & 符号
 		if (BeanFactoryUtils.isFactoryDereference(name)) {
 			if (beanInstance instanceof NullBean) {
-				// 如果是 nullBean，第一次看到这种空的 bean =-=
+				// 如果是NullBean，直接返回
 				return beanInstance;
 			}
 			if (!(beanInstance instanceof FactoryBean)) {
-				// 如果不是空 bean，又不是工厂 bean，报错
+				// 如果name前缀带 &，又不是工厂 bean，报错
 				throw new BeanIsNotAFactoryException(transformedBeanName(name), beanInstance.getClass());
 			}
 		}
 
-		// Now we have the bean instance, which may be a normal bean or a FactoryBean.
-		// If it's a FactoryBean, we use it to create a bean instance, unless the
-		// caller actually wants a reference to the factory.
-		// 如果不是工厂 bean，或者带有 & 符号前缀，返回自己本身的类（可以返回工厂实例）
+		// 到这里我们就有了一个 Bean 实例，当然该实例可能是会是是一个正常的 bean 又或者是一个 FactoryBean
+		// 如果是 FactoryBean，则创建该 Bean
 		if (!(beanInstance instanceof FactoryBean) || BeanFactoryUtils.isFactoryDereference(name)) {
 			return beanInstance;
 		}
@@ -1682,16 +1679,16 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			object = getCachedObjectForFactoryBean(beanName);
 		}
 		if (object == null) {
-			// Return bean instance from factory.
-			// 到了这一步，很确定是工厂 bean 类型了，通过 getObject 方法实例化 bean
+			// 到了这一步，很确定是FactoryBean 类型了，通过 getObject 方法实例化 bean
 			FactoryBean<?> factory = (FactoryBean<?>) beanInstance;
-			// Caches object obtained from FactoryBean if it is a singleton.
 			// 尝试从单例缓存中获取
 			if (mbd == null && containsBeanDefinition(beanName)) {
 				mbd = getMergedLocalBeanDefinition(beanName);
 			}
 			// 是否是用户自定义的工厂 bean
 			boolean synthetic = (mbd != null && mbd.isSynthetic());
+
+			// 核心方法，从FactoryBean 获取单例Bean
 			object = getObjectFromFactoryBean(factory, beanName, !synthetic);
 		}
 		return object;
