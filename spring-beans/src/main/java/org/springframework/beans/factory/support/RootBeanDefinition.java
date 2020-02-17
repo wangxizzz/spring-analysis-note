@@ -151,6 +151,7 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 	public <T> RootBeanDefinition(@Nullable Class<T> beanClass, @Nullable Supplier<T> instanceSupplier) {
 		super();
 		setBeanClass(beanClass);
+		// 在构造 BeanDefinition 对象的时候，设置了 instanceSupplier 该值
 		setInstanceSupplier(instanceSupplier);
 	}
 
