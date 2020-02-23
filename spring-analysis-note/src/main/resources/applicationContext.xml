@@ -2,17 +2,6 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-	<!--增加别名方式1-->
-	<bean id="bean01" class="bean.MyBean01">
-		<property name="bean02" ref="bean02"/>
-		<property name="bean03" ref="bean03"/>
-	</bean>
 
-	<bean id="bean02" class="bean.Bean02"/>
-	<bean id="bean03" class="bean.Bean03"/>
 
-	<!--<bean id="D" class="bean.Bean02" name="A"></bean>-->
-	<bean id="car" class="factory.CarFactoryBean">
-		<property name="carInfo" value="超级跑车,400,3000000"/>
-	</bean>
 </beans>
