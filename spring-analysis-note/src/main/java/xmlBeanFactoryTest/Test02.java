@@ -14,7 +14,9 @@ public class Test02 {
 		BeanFactory beanFactory = new XmlBeanFactory(new ClassPathResource("applicationContext.xml"));
 
 
+		Object logInService = beanFactory.getBean("userService");
 
+		System.out.println(logInService);
 	}
 }
 

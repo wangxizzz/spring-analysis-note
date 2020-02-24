@@ -1508,10 +1508,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 */
 	protected void autowireByName(
 			String beanName, AbstractBeanDefinition mbd, BeanWrapper bw, MutablePropertyValues pvs) {
-		// 获取需要注入的bean的名字集合
+		// 获取Bean对象中非简单属性.
 		String[] propertyNames = unsatisfiedNonSimpleProperties(mbd, bw);
 		for (String propertyName : propertyNames) {
-			// 如果需要注入的bean存在于容器中，那么按beanName查找进行注入
+			// 如果需要注入的属性bean存在于容器中，那么按beanName查找进行注入
 			if (containsBean(propertyName)) {
 				// 获取需要注入的bean实例
 				Object bean = getBean(propertyName);
@@ -1547,19 +1547,19 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	protected void autowireByType(
 			String beanName, AbstractBeanDefinition mbd, BeanWrapper bw, MutablePropertyValues pvs) {
 
+		// 获取自定义 TypeConverter实例
 		TypeConverter converter = getCustomTypeConverter();
 		if (converter == null) {
 			converter = bw;
 		}
 
 		Set<String> autowiredBeanNames = new LinkedHashSet<>(4);
+		// 获取非简单属性名(本质是获取bean所依赖的beanName数组)
 		String[] propertyNames = unsatisfiedNonSimpleProperties(mbd, bw);
 		for (String propertyName : propertyNames) {
 			try {
 				// 根据依赖的bean获取PropertyDescriptor
 				PropertyDescriptor pd = bw.getPropertyDescriptor(propertyName);
-				// Don't try autowiring by type for type Object: never makes sense,
-				// even if it technically is a unsatisfied, non-simple property.
 				if (Object.class != pd.getPropertyType()) {
 					// 探测指定通常为JavaBean中属性的set方法
 					MethodParameter methodParam = BeanUtils.getWriteMethodParameter(pd);
@@ -1572,7 +1572,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 					if (autowiredArgument != null) {
 						pvs.add(propertyName, autowiredArgument);
 					}
+					// 遍历 autowiredBeanName 数组
 					for (String autowiredBeanName : autowiredBeanNames) {
+						// 属性依赖注入
 						registerDependentBean(autowiredBeanName, beanName);
 						if (logger.isTraceEnabled()) {
 							logger.trace("Autowiring by type from bean name '" + beanName + "' via property '" +
@@ -1597,14 +1599,19 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 * @param bw the BeanWrapper the bean was created with
 	 * @return an array of bean property names
 	 * @see org.springframework.beans.BeanUtils#isSimpleProperty
+	 *
+	 * 返回这个bena的非简单属性数组，比如可能的属性是其他bean的引用。非简单属性不包含原始类型与String.
 	 */
 	protected String[] unsatisfiedNonSimpleProperties(AbstractBeanDefinition mbd, BeanWrapper bw) {
 		Set<String> result = new TreeSet<>();
+		// 获取bean中定义的所有属性
 		PropertyValues pvs = mbd.getPropertyValues();
 		PropertyDescriptor[] pds = bw.getPropertyDescriptors();
+		// 遍历 PropertyDescriptor 数组
 		for (PropertyDescriptor pd : pds) {
 			if (pd.getWriteMethod() != null && !isExcludedFromDependencyCheck(pd) && !pvs.contains(pd.getName()) &&
 					!BeanUtils.isSimpleProperty(pd.getPropertyType())) {
+				// 获取属性名，加入到结果数组返回
 				result.add(pd.getName());
 			}
 		}
