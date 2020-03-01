@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="circulateBean01" class="circulate.CirculateBean01" scope="singleton" lazy-init="true">
+		<property name="bean02" ref="circulateBean02"/>
+	</bean>
+
+	<bean id="circulateBean02" class="circulate.CirculateBean02" scope="singleton" lazy-init="true">
+		<property name="bean01" ref="circulateBean01"/>
+	</bean>
+
+	<!--通过构造函数注入 看循环依赖问题-->
+	<bean id="circulateBean03" class="circulate.CirculateBean03" scope="singleton" lazy-init="true">
+		<constructor-arg name="bean04" ref="circulateBean04"/>
+	</bean>
+	<bean id="circulateBean04" class="circulate.CirculateBean04" scope="singleton" lazy-init="true">
+		<constructor-arg name="bean03" ref="circulateBean03"/>
+	</bean>
+</beans>

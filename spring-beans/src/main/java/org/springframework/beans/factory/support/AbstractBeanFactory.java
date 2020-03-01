@@ -300,6 +300,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				// 处理所依赖的bean
 				String[] dependsOn = mbd.getDependsOn();
 				// 如果存在依赖则需要递归实例化依赖的 bean
+				// 经过断点调试，无论是构造函数注入还是属性注入依赖bean，dependsOn数组始终为空。那么dependsOn在何处赋值的呢？
 				if (dependsOn != null) {
 					for (String dep : dependsOn) {
 						// 若给定的依赖 bean 已经注册为依赖给定的 bean  即为循环依赖的情况
