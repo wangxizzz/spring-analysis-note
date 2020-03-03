@@ -556,6 +556,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		if (mbd.isSingleton()) {
 			instanceWrapper = this.factoryBeanInstanceCache.remove(beanName);
 		}
+		// bean的实例化。
 		if (instanceWrapper == null) {
 			// 根据指定 bean 使用对应的策略创建新的实例. 利用工厂方法，或构造函数创建BeanWrapper对象
 			instanceWrapper = createBeanInstance(beanName, mbd, args);
@@ -598,7 +599,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		// Initialize the bean instance.
 		Object exposedObject = bean;
 		try {
-			// 对 bean 进行填充，将当前bean依赖的bean注入,如果存在对其它 bean 的依赖，将会递归初始化依赖的 bean
+			// 对 bean 进行填充(将BeanDefinition的属性值赋值给 BeanWrapper 实例对象的过程)，
+			// 将当前bean依赖的bean注入,如果存在对其它 bean 的依赖，将会递归初始化依赖的 bean
 			populateBean(beanName, mbd, instanceWrapper);
 			// 调用初始化方法，例如 init-method
 			exposedObject = initializeBean(beanName, exposedObject, mbd);

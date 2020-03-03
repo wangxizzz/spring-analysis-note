@@ -187,6 +187,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 		// 检查缓存中是否存在实例
 		Object singletonObject = this.singletonObjects.get(beanName);
 		if (singletonObject == null && isSingletonCurrentlyInCreation(beanName)) {
+			// 单例模式必须保证全局唯一。所以加锁。
 			synchronized (this.singletonObjects) {
 				singletonObject = this.earlySingletonObjects.get(beanName);
 				// 如果允许提前创建
@@ -194,6 +195,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 					ObjectFactory<?> singletonFactory = this.singletonFactories.get(beanName);
 					if (singletonFactory != null) {
 						singletonObject = singletonFactory.getObject();
+						// 把早期bean放入二级缓存
 						this.earlySingletonObjects.put(beanName, singletonObject);
 						// 在doCreateBean中会调用singletonFactories的put方法
 						this.singletonFactories.remove(beanName);

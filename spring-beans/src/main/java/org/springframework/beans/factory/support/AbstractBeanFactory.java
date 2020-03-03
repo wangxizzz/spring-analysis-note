@@ -1672,7 +1672,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		if (!(beanInstance instanceof FactoryBean) || BeanFactoryUtils.isFactoryDereference(name)) {
 			return beanInstance;
 		}
-		// 能走到这里来，说明用户传入的参数是FactoryBean，但是参数又没有带 & 符号，所以，spring这块做了兼容
+		// 能走到这里来，说明用户传入的参数是FactoryBean，但是参数又没有带 & 符号，spring这块做了兼容
 		// 加载工厂 bean
 		Object object = null;
 		if (mbd == null) {
