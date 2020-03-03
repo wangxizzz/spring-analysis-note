@@ -4,4 +4,6 @@
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<!--<bean id="userService" class="bean.UserService"/>-->
+
+	<bean id="myApplicationAware" class="aware接口实现.MyApplicationAware"/>
 </beans>
