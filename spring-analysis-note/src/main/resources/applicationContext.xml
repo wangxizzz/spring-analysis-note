@@ -5,6 +5,7 @@
 
 	<!--<bean id="userService" class="bean.UserService"/>-->
 
-	<bean id="myApplicationAware" class="aware接口实现.MyApplicationAware"/>
-	<bean id="beanPostProcessorTest" class="BeanPostProcessor接口.BeanPostProcessorTest"/>
+	<!--<bean id="myApplicationAware" class="aware接口实现.MyApplicationAware"/>-->
+	<!--<bean id="beanPostProcessorTest" class="BeanPostProcessor接口.BeanPostProcessorTest"/>-->
+	<bean id="factoryBeanPojo" class="factoryBeanTest.FactoryBeanPojo"/>
 </beans>
