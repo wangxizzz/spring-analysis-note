@@ -362,6 +362,10 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 
 		// Create proxy if we have advice.
 		// 如果存在增强方法则创建代理
+		/**
+		 * 1.判断bean是否满足切入点表达式，如果满足那么就生成代理对象。
+		 * 2.bean实现了接口，调用JDK的动态代理，否则调用cglib，可以手工配置接口利用cglib生成代理类。
+		 */
 		Object[] specificInterceptors = getAdvicesAndAdvisorsForBean(bean.getClass(), beanName, null);
 		if (specificInterceptors != DO_NOT_PROXY) {
 			// 增强方法不为空
