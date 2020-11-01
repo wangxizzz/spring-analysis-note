@@ -520,7 +520,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			// 创建并初始化 BeanFactory
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
-			// Prepare the bean factory for use in this context.
+			// Prepare the bean factory for use in this context. 对beanFactory做一些特殊处理
 			prepareBeanFactory(beanFactory);
 
 			try {
@@ -553,7 +553,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				registerListeners();
 
 				// Instantiate all remaining (non-lazy-init) singletons.
-				// 注释 4.2 实例化非懒加载的单例
+				// 注释 4.2 实例化单例
 				finishBeanFactoryInitialization(beanFactory);
 
 				// Last step: publish corresponding event.

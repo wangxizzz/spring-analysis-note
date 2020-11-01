@@ -134,7 +134,7 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 			beanFactory.setSerializationId(getId());
 			// 定制 BeanFactory 设置相关属性
 			customizeBeanFactory(beanFactory);
-			// 开始加载BeanDefinition （bean 注册）
+			// 开始加载BeanDefinition （bean 注册）最终会初始化 Map<String, BeanDefinition>，bean没有实例化
 			loadBeanDefinitions(beanFactory);
 			// 由于 beanFactory 是公共变量，存在多线程操作，所以加锁操作，避免混乱修改
 			synchronized (this.beanFactoryMonitor) {
